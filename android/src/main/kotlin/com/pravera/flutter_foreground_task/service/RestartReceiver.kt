@@ -41,8 +41,12 @@ class RestartReceiver : BroadcastReceiver() {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
 				PluginUtils.canScheduleExactAlarms(context)) {
 				alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+			}  else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    				// M = API 23 (for setAndAllowWhileIdle)
+  				alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
 			} else {
-				alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+    				// For devices below API 23, fallback to normal set()
+    				alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, operation)
 			}
 		}
 
