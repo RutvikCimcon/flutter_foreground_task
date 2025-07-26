@@ -40,8 +40,7 @@ class RestartReceiver : BroadcastReceiver() {
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
 				PluginUtils.canScheduleExactAlarms(context)) {
-				val info = AlarmManager.AlarmClockInfo(triggerTime, operation)
-				alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+				alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
 			} else {
 				alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
 			}
