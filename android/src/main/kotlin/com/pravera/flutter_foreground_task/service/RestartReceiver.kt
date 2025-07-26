@@ -37,7 +37,14 @@ class RestartReceiver : BroadcastReceiver() {
 				context, RequestCode.SET_RESTART_SERVICE_ALARM, intent, flags)
 
 			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-			alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+				PluginUtils.canScheduleExactAlarms(context)) {
+				val info = AlarmManager.AlarmClockInfo(triggerTime, operation)
+				alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+			} else {
+				alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, operation)
+			}
 		}
 
 		fun cancelRestartAlarm(context: Context) {
