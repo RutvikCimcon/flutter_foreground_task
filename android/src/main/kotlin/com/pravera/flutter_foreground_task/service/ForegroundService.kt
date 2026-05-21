@@ -119,6 +119,7 @@ class ForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         registerBroadcastReceiver()
+        ScreenActionReceiver.register(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -186,6 +187,9 @@ class ForegroundService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         val isTimeout = this.isTimeout
+
+        ScreenActionReceiver.unregister(this)
+
         destroyForegroundTask(isTimeout)
         stopForegroundService()
         unregisterBroadcastReceiver()
